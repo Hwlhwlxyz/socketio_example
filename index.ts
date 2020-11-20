@@ -1,0 +1,24 @@
+
+
+var app = require('express')();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+
+server.listen(3000);
+
+app.get('/', function (req, res) {
+    res.sendFile('index.html', {root: __dirname});
+});
+
+io.on('connection', function (socket) {
+  socket.emit('news', { hello: 'world' });
+  socket.on('my other event', function (data) {
+    console.log(data);
+  });
+
+  socket.emit('test', { message: 'test' });
+
+  socket.on('disconnect', function(){
+    console.log('disconnected');
+  });
+});
